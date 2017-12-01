@@ -1,0 +1,292 @@
+Some c facts you need to acknowledge.
+
+
+C compiler: clang.
+
+* clang hello.c -> a.out 
+* clang -o hello hello.c -> change a.out name
+* clang -E hello1.c > hello2.c -> run just the preprocessing phase.
+* clang -S hello2.c -> Transform the code into assembly code.
+* clang -c hello2.s -> run the assembling phase.
+* clang hello.c -Lhi -> linking hi library (included hi.h).
+* clang hello.c Lm -> Link all included libraries.
+* clang hello.c -Wall -> Turn on all warnings.
+* cland hello.c -Werror -> Prevent creating an executable file if there are errors. 
+* clang -ggdb -> Enable special debuging informations in the executable file.
+    You will be able to run ggdb debugger when the program crushes.
+
+
+
+-Lname: name - name of library (must be at the end of the command).
+
+Compile: Taking a higher level programming language to a lower level programming language.
+
+4 majors steps in the compilation:
+
+  i. Preprocessing: (preprocessor)
+    Copy and paste all the content of the included files and the defined variables/constants.
+ ii. Compilation: (compiler)
+    Compiling c to an Assembly code.
+iii. Assembling: (Assembler)
+    Transform the Assembly code into object/machine code. (0 & 1)
+ iv. Linking: (Linker)
+    Combine a bunch of object files into one big file that can be executed.
+
+
+The implementation files and the header files goes hand in hand.
+
+ Implementation (.c)
++
+ header         (.h)
+--------------------
+= compiled -> object (.o)
+--------------------
+Linked -> binary file
+
+--> A programmer will ship binary and header to other programmers/users.
+The implementation file is not needed, unless, to compile the library from scratch.
+
+
+int x = 7;
+int* y = &x;
+
+*y++; -- will increase the pointer, so we will have y pointing to an other address and not x.
+(*y)++; -- will increase x and not the pointer.
+
+
+x++; -- used then incrimented.
+++x; -- incrimented then used.
+
+int* x;
+int* y;
+// x point to a pointee
+x = malloc(sizeof(int));
+// stock a value in the pointee
+*x = 42;
+// y point to x
+y = x;
+
+* Pointer & Pointee are seperate. (don't forget to set up the pointee.)
+* Dereference a pointer to access its pointee.
+    *<pointer name> -> data
+* Referencing != Dereferencing:
+    &<variable name> -> address
+    *&*&x = 23; <=> x = 23;
+
+
+int n = 5;
+int* pointer = &n;
+int** double_pointer = &pointer;
+**double_pointer = 23;
+
+n will have 23 stored in it.
+
+
+
+Command-line arguments:
+    
+    int main(int argc, char* argv[])
+
+argc - number of strings that make up your command-line.
+arvg - array that will contains the strings.
+
+* Always the name of program is at index 0.
+
+
+Prototype:
+
+    int cube(int x);
+    int main(void)
+    {
+
+    }
+    int cube(int )
+    {
+
+    }
+
+
+ASCII Math:
+
+printf("%d\n", 'a' - 'A');
+printf("%c\n", ('z' - 'a' + 1) % 26 + 'a');
+
+
+atoi(); - Converts a string to an int.
+
+
+Segmentation fault (core dumped) - Error provoked when a space in memory shouldn't be reached is touched.
+    Generate core file to help debug the problem.
+
+
+
+Pointer-type array:
+
+    int* x = malloc(sizeof(int) * N);
+
+Must call free, else we will have a memory leak.
+
+The pointer (x) is stored on the stack.
+The block of memory (array) is stored on the heap.
+
+malloc() - memory allocate.
+    Always check if it returned NULL.
+
+
+Bracket-type array:
+
+    int x[N];
+
+Automatically deallocated when the main returns.
+
+
+t[i] = s[i] <=> *(t + i) = *(s + i);
+
+
+sizeof():
+
+    + bracket-array - return the size of the entire array.
+    + pointer-array - return the size of the pointer.
+
+
+An off by one error:
+
+    int x[N];
+    for (int i = 0; i <= N; i++)
+    {
+
+    }
+
+
+
+GDB - GNU Debugger:
+
++ break [line|function] - Sets a breakpoint.
++ next - Skip to next line; over functions.
++ step - Step into a function.
++ list - Print surrounding code.
++ print [variable] - Print a specified variable.
++ info locals - Print out local variables.
++ display [variable] - Display the variable for the duration of debugging.
++ disable - Disable break points.
+
++ beak file_name.c:line_number - Set a breakpoint at the specified line.
+
+To run gdb:
+  
+    gdb ./file_name
+
+
+Structs:
+
+// to omit struct every time we accede to internal variables
+typedef struct
+{
+    char* name;
+    .
+    .
+    .
+}
+Student;
+
+// accede to name
+student.name;
+
+// to use both struct Student and Student
+typedef struct Student
+{
+    int age;
+    .
+    .
+    .
+}
+Student;
+
+// recursive struct
+typedef struct node
+{
+    int val;
+    struct node* next;
+}
+node;
+
+// pointer to struct
+node* pointer_node = malloc(sizeof(node));
+
+// to accede a variable in the pointer
+(*node).val = 4;
+// or, simply
+node->val = 4;
+
+
+
+File I/O:
+
+FILE* file;
+
+// r - read
+// w - write
+// a - append
+file = fopen("path_to_file.txt", "r");
+
+// check if the pointer is null
+if (file == NULL)
+{
+   printf("Could not open the file!");
+   return 1;
+}
+
+// read from file
+fgetc - returns the next character
+fgets - returns a line of text
+fread - reads a certain number of bytes and places them into an array
+fseek - moves to a certain position
+
+// write to a file
+fputc - writes a character
+fputs - writes a line of text
+fprintf - prints a formatted output to a file
+fwrite - writes an array of bytes to a file
+
+// close the file
+fclose(file);
+
+// check for End Of File - EOF
+// or
+while (!feof(file))
+{
+    // read from file
+}
+// or
+while (fget(output, sizeof(output), fp) != NULL)
+{
+    // read from file
+}
+After this loop, we can call ferror, or feof to determine the reason reading from file has returned NULL.
+
+ferror
+feof
+-> indicate if an error or a function returned NULL.
+
+
+
+
+putchar(char); - Prints a char to "stdout".
+
+
+
+Make files:
+
+Makefile is a configuration file that contains a list of rules that tells make how to build inputted programs for you.
+
+
+Open Makefile_eg for a simple Makefile file.
+
+
+-> Valgrind is a tool that helps programmers to find memory related problems.
+It make us notice the cases where we touch memory that doesn't belong to us, and also where we have memory leaks.
+
+
+* Buffer overflow is filling a buffer, or a chunk of memory, with too much informations.
+
+Look for the CS50 notebook and complete the missing part...

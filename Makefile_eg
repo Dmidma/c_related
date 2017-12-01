@@ -1,0 +1,11 @@
+# This is a comment
+# Makefile example
+# Oussema Hidri
+
+
+find: find.c helpers.c helpers.h
+	clang -ggdb3 -O0 -std=c99 -Wall -Werror -o find find.c helpers.c -lm
+
+# under find: there is a tab and not spaces.
+# find: is the target
+# find.c helpers.c helpers.h is the list of files the target is dependent on.
